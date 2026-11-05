@@ -1,156 +1,271 @@
-const startButton = document.getElementById("start-btn");
-const nextButton = document.getElementById("next-btn");
 
-const questionContainerElement = document.getElementById("question-container");
-const questionElement = document.getElementById("question");
-const answerButtonsElement = document.getElementById("answer-buttons");
-const scoreContainerElement = document.getElementById("score");
-const scoreElement = document.getElementById("right-answers");
-const totalScoreContainerElement = document.getElementById("total-score-container");
-const totalScoreElement = document.getElementById("total-score");
-
-let shuffledQuestions, currentQuestionIndex;
-let quizScore = 0;
-
-startButton.addEventListener("click", startGame);
-nextButton.addEventListener("click", () => {
-  currentQuestionIndex++;
-  setNextQuestion();
-});
-
-function startGame() {
-  if (startButton.innerText === "أعد الاختبار") {
-    quizScore = 0;
-    currentQuestionIndex = 0;
-  startButton.innerText = "ابدأ الاختبار";
-    scoreContainerElement.style.display = "none";
-    nextButton.classList.add("hide");
-    totalScoreContainerElement.style.display = "none";
+const questions = [
+  {
+    question: "ما المقصود بالواقع الافتراضي VR؟",
+    answers: [
+      "عالم رقمي افتراضي ثلاثي الأبعاد",
+      "برنامج لكتابة النصوص",
+      "شبكة للتواصل الاجتماعي",
+      "جهاز للطباعة"
+    ],
+    correct: 0
+  },
+  {
+    question: "ما المقصود بالواقع المعزز AR؟",
+    answers: [
+      "إلغاء العالم الحقيقي",
+      "إضافة عناصر رقمية إلى العالم الحقيقي",
+      "تشغيل الألعاب فقط",
+      "تصفح الإنترنت"
+    ],
+    correct: 1
+  },
+  {
+    question: "أي جهاز يُستخدم غالباً لتجربة الواقع الافتراضي؟",
+    answers: [
+      "الطابعة",
+      "لوحة المفاتيح",
+      "نظارة الواقع الافتراضي",
+      "الماسح الضوئي"
+    ],
+    correct: 2
+  },
+  {
+    question: "ما الفرق الأساسي بين VR و AR؟",
+    answers: [
+      "لا يوجد فرق",
+      "VR ينشئ عالماً افتراضياً وAR يضيف عناصر للعالم الحقيقي",
+      "كلاهما للطباعة",
+      "AR يمنع استخدام الكاميرا"
+    ],
+    correct: 1
+  },
+  {
+    question: "أين يمكن استخدام الواقع الافتراضي؟",
+    answers: [
+      "التعليم والتدريب",
+      "الطب",
+      "الألعاب",
+      "جميع ما سبق"
+    ],
+    correct: 3
+  },
+  {
+    question: "أي تقنية تسمح برؤية مجسم رقمي داخل الغرفة الحقيقية؟",
+    answers: [
+      "الواقع المعزز AR",
+      "معالج النصوص",
+      "البريد الإلكتروني",
+      "نظام التشغيل"
+    ],
+    correct: 0
+  },
+  {
+    question: "ما إحدى فوائد الواقع الافتراضي في التعليم؟",
+    answers: [
+      "منع التعلم",
+      "تجربة بيئات تعليمية افتراضية",
+      "إيقاف الأجهزة",
+      "حذف المعلومات"
+    ],
+    correct: 1
+  },
+  {
+    question: "ما دور الكاميرا في بعض تطبيقات الواقع المعزز؟",
+    answers: [
+      "عرض النصوص فقط",
+      "التقاط العالم الحقيقي لإضافة عناصر رقمية إليه",
+      "إيقاف الإنترنت",
+      "تشغيل الطابعة"
+    ],
+    correct: 1
+  },
+  {
+    question: "ماذا تعني كلمة VR؟",
+    answers: [
+      "Virtual Reality",
+      "Visual Radio",
+      "Video Record",
+      "Virtual Reading"
+    ],
+    correct: 0
+  },
+  {
+    question: "ماذا تعني كلمة AR؟",
+    answers: [
+      "Automatic Reading",
+      "Augmented Reality",
+      "Audio Record",
+      "Advanced Radio"
+    ],
+    correct: 1
   }
-  startButton.classList.add("hide");
-  scoreContainerElement.style.display = "flex";
-  scoreElement.innerText = quizScore;
-  shuffledQuestions = questions.sort(() => Math.random() - 0.5);
-  currentQuestionIndex = 0;
-  questionContainerElement.classList.remove("hide");
-  setNextQuestion();
-}
-
-function setNextQuestion() {
-  resetState();
-  showQuestion(shuffledQuestions[currentQuestionIndex]);
-}
-
-function showQuestion(question) {
-  questionElement.innerText = question.question;
-
-  question.answers.forEach((answer) => {
-    const button = document.createElement("button");
-    button.innerText = answer.text;
-    button.classList.add("btn");
-
-    if (answer.correct) {
-      button.dataset.correct = answer.correct;
-    }
-
-    button.addEventListener("click", selectAnswer);
-    answerButtonsElement.appendChild(button);
-  });
-}
-
-function resetState() {
-  clearStatusClass(document.body);
-  nextButton.classList.add("hide");
-
-  while (answerButtonsElement.firstChild) {
-    answerButtonsElement.removeChild(answerButtonsElement.firstChild);
-  }
-}
-
-function selectAnswer(e) {
-  const selectedButton = e.target;
-  const correct = selectedButton.dataset.correct;
-
-  Array.from(answerButtonsElement.children).forEach((button) => {
-    setStatusClass(button, button.dataset.correct);
-  });
-
-  if (shuffledQuestions.length > currentQuestionIndex + 1) {
-    nextButton.classList.remove("hide");
-  } else {
-    startButton.innerText = "Restart";
-    startButton.classList.remove("hide");
-    questionContainerElement.classList.add("hide");
-    totalScoreContainerElement.style.display = "flex";
-    scoreContainerElement.style.display = "none";
-  }
-
-  if (correct) {
-    quizScore++;
-  }
-
-  scoreElement.innerText = quizScore;
-  totalScoreElement.innerText = `${quizScore}/${shuffledQuestions.length}`;
-}
-
-function setStatusClass(element, correct) {
-  clearStatusClass(element);
-
-  if (correct) {
-    element.classList.add("correct");
-  } else {
-    element.classList.add("wrong");
-  }
-}
-
-function clearStatusClass(element) {
-  element.classList.remove("correct");
-  element.classList.remove("wrong");
-}
-
-{
-  question: "ما هو الحاسوب؟",
-  answers: [
-    { text: "جهاز لمعالجة البيانات", correct: true },
-    { text: "جهاز للطباعة فقط", correct: false },
-    { text: "جهاز لتشغيل الألعاب فقط", correct: false },
-    { text: "جهاز لحفظ الصور فقط", correct: false },
-  ],
-},
- {
-  question: "ما هي المكونات الأساسية للحاسوب؟",
-  answers: [
-    { text: "المكونات المادية والبرمجية", correct: true },
-    { text: "الشاشة فقط", correct: false },
-    { text: "لوحة المفاتيح فقط", correct: false },
-    { text: "الطابعة والفأرة فقط", correct: false },
-  ],
-},
- {
-  question: "ما وظيفة وحدة المعالجة المركزية (CPU)؟",
-  answers: [
-    { text: "تنفيذ العمليات ومعالجة البيانات", correct: true },
-    { text: "عرض الصور", correct: false },
-    { text: "طباعة المستندات", correct: false },
-    { text: "تشغيل الصوت فقط", correct: false },
-  ],
-},
- {
-  question: "ما وظيفة ذاكرة RAM؟",
-  answers: [
-    { text: "تخزين البيانات مؤقتًا أثناء التشغيل", correct: true },
-    { text: "حفظ الملفات بشكل دائم", correct: false },
-    { text: "عرض الصور على الشاشة", correct: false },
-    { text: "طباعة المستندات", correct: false },
-  ],
-},
-{
-  question: "ما وظيفة نظام التشغيل؟",
-  answers: [
-    { text: "إدارة موارد الحاسوب وتشغيل البرامج", correct: true },
-    { text: "تصميم الصور فقط", correct: false },
-    { text: "كتابة النصوص فقط", correct: false },
-    { text: "تصفح الإنترنت فقط", correct: false },
-  ],
-},
 ];
+
+const info = {
+  vr: {
+    emoji: "🥽",
+    tag: "VIRTUAL REALITY",
+    title: "الواقع الافتراضي VR",
+    description: "الواقع الافتراضي هو تقنية تنشئ بيئة رقمية ثلاثية الأبعاد، تسمح للمستخدم بالانغماس داخل عالم افتراضي والتفاعل معه باستخدام أجهزة مثل نظارات الواقع الافتراضي.",
+    uses: ["🎮 الألعاب", "🎓 التعليم", "🏥 التدريب الطبي", "🏗️ الهندسة"]
+  },
+  ar: {
+    emoji: "🌍",
+    tag: "AUGMENTED REALITY",
+    title: "الواقع المعزز AR",
+    description: "الواقع المعزز هو تقنية تضيف عناصر رقمية مثل الصور والمجسمات والمعلومات إلى العالم الحقيقي، ويمكن مشاهدتها من خلال الهاتف أو الأجهزة الذكية.",
+    uses: ["📱 تطبيقات الهواتف", "🛍️ التسوق", "🎓 التعليم", "🏛️ المتاحف"]
+  }
+};
+
+let currentQuestion = 0;
+let score = 0;
+let answered = false;
+
+function showScreen(id) {
+  document.querySelectorAll(".screen").forEach(screen => {
+    screen.classList.remove("active");
+  });
+
+  document.getElementById(id).classList.add("active");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function goHome() {
+  showScreen("home");
+}
+
+function showInfo(type) {
+  const data = info[type];
+
+  document.getElementById("infoEmoji").textContent = data.emoji;
+  document.getElementById("infoTag").textContent = data.tag;
+  document.getElementById("infoTitle").textContent = data.title;
+  document.getElementById("infoDescription").textContent = data.description;
+
+  const uses = document.getElementById("infoUses");
+  uses.innerHTML = "";
+
+  data.uses.forEach(item => {
+    const span = document.createElement("span");
+    span.textContent = item;
+    uses.appendChild(span);
+  });
+
+  showScreen("info");
+}
+
+function startQuiz() {
+  currentQuestion = 0;
+  score = 0;
+  showScreen("quiz");
+  showQuestion();
+}
+
+function showQuestion() {
+  answered = false;
+
+  const q = questions[currentQuestion];
+
+  document.getElementById("questionNumber").textContent =
+    `السؤال ${currentQuestion + 1} من ${questions.length}`;
+
+  document.getElementById("scoreLabel").textContent =
+    `⭐ ${score} نقطة`;
+
+  document.getElementById("progressBar").style.width =
+    `${(currentQuestion / questions.length) * 100}%`;
+
+  document.getElementById("questionText").textContent = q.question;
+  document.getElementById("feedback").textContent = "";
+
+  document.getElementById("nextBtn").classList.add("hidden");
+
+  const answersBox = document.getElementById("answers");
+  answersBox.innerHTML = "";
+
+  q.answers.forEach((answer, index) => {
+    const button = document.createElement("button");
+    button.className = "answer-btn";
+    button.textContent = answer;
+
+    button.addEventListener("click", () => selectAnswer(index));
+
+    answersBox.appendChild(button);
+  });
+}
+
+function selectAnswer(selectedIndex) {
+  if (answered) return;
+
+  answered = true;
+
+  const q = questions[currentQuestion];
+  const buttons = document.querySelectorAll(".answer-btn");
+  const feedback = document.getElementById("feedback");
+
+  buttons.forEach((button, index) => {
+    button.disabled = true;
+
+    if (index === q.correct) {
+      button.classList.add("correct");
+    }
+  });
+
+  if (selectedIndex === q.correct) {
+    score++;
+    feedback.textContent = "🎉 إجابة صحيحة! أحسنتِ يا مبدعة.";
+    feedback.style.color = "#9bffd0";
+  } else {
+    buttons[selectedIndex].classList.add("wrong");
+    feedback.textContent = "💗 إجابة غير صحيحة، حاولي في السؤال القادم.";
+    feedback.style.color = "#ffc1df";
+  }
+
+  document.getElementById("scoreLabel").textContent =
+    `⭐ ${score} نقطة`;
+
+  document.getElementById("nextBtn").classList.remove("hidden");
+}
+
+function nextQuestion() {
+  currentQuestion++;
+
+  if (currentQuestion < questions.length) {
+    showQuestion();
+  } else {
+    showResult();
+  }
+}
+
+function showResult() {
+  showScreen("result");
+
+  document.getElementById("progressBar").style.width = "100%";
+  document.getElementById("finalScore").textContent = score;
+
+  let message;
+  let description;
+
+  if (score === 10) {
+    message = "يا لها من نتيجة مذهلة! 👑";
+    description = "أنتِ نجمة كوكب التكنولوجيا، أجبتِ عن جميع الأسئلة!";
+  } else if (score >= 7) {
+    message = "رائعة يا مستكشفة! 💎";
+    description = "لديك معرفة ممتازة بعالم الواقع الافتراضي والمعزز.";
+  } else if (score >= 5) {
+    message = "أحسنتِ! 🌸";
+    description = "أنتِ في الطريق الصحيح، واصلي اكتشاف هذا العالم.";
+  } else {
+    message = "لا تستسلمي يا بطلة! 💗";
+    description = "راجعي المعلومات وحاولي مرة أخرى، فالمعرفة مغامرة.";
+  }
+
+  document.getElementById("resultMessage").textContent = message;
+  document.getElementById("resultDescription").textContent = description;
+}
+
+function restartQuiz() {
+  startQuiz();
+}
