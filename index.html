@@ -1,38 +1,147 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>HTML Quiz Site</title>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>كوكب VR و AR | رحلة المستقبل</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
 
-    <!-- Styles -->
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div class="container">
-      <div id="question-container" class="hide">
-        <div id="question">Question</div>
-        <div id="answer-buttons" class="btn-grid">
-          <button class="btn">Answer 1</button>
-          <button class="btn">Answer 2</button>
-          <button class="btn">Answer 3</button>
-          <button class="btn">Answer 4</button>
+  <div class="stars"></div>
+
+  <header class="navbar">
+    <a class="brand" href="#" onclick="goHome()">
+      <span class="brand-icon">🥽</span>
+      <span>VR <b>+</b> AR<small>اكتشفِ عالماً جديداً</small></span>
+    </a>
+    <nav>
+      <button onclick="goHome()">الرئيسية</button>
+      <button onclick="showInfo('vr')">عن VR</button>
+      <button onclick="showInfo('ar')">عن AR</button>
+      <button onclick="startQuiz()">الاختبار</button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="home" class="screen active">
+      <div class="hero">
+        <div class="hero-art">
+          <div class="planet planet-one"></div>
+          <div class="planet planet-two"></div>
+          <div class="crystal crystal-one">💎</div>
+          <div class="crystal crystal-two">✨</div>
+          <div class="girl">👩🏻‍🚀</div>
+          <div class="robot">🤖</div>
+        </div>
+
+        <div class="hero-content">
+          <span class="tag">✦ رحلة إلى المستقبل ✦</span>
+          <h1>مرحباً بكِ في<br><span>كوكب الواقع الافتراضي والمعزز</span></h1>
+          <p>
+            استعدي لرحلة ساحرة بين العوالم الرقمية!
+            اكتشفي كيف يلتقي الخيال بالتكنولوجيا،
+            وتعرّفي على VR وAR بطريقة ممتعة وتفاعلية.
+          </p>
+          <button class="main-btn" onclick="startQuiz()">ابدئي الاختبار الآن <span>✦</span></button>
         </div>
       </div>
-      <div id="total-score-container" class="hide">
-        <p>Total Score</p>
-        <span id="total-score">5/10</span>
-      </div>
-      <div class="controls">
-        <button id="start-btn" class="start-btn btn">Start</button>
-        <button id="next-btn" class="next-btn btn hide">Next</button>
-      </div>
-    </div>
-    <div id="score" class="hide">
-      <span id="right-answers"></span>
-    </div>
 
-    <!-- JavaScript -->
-    <script src="script.js"></script>
-  </body>
+      <div class="section-heading">
+        <span>اكتشفي عالم التكنولوجيا</span>
+        <h2>رحلتك تبدأ من هنا 💗</h2>
+      </div>
+
+      <div class="world-cards">
+        <article class="world-card vr-card">
+          <div class="card-image vr-image">🥽</div>
+          <div class="card-content">
+            <span class="mini-tag">VR</span>
+            <h3>الواقع الافتراضي</h3>
+            <p>عالم رقمي ينقلك إلى بيئة افتراضية ثلاثية الأبعاد، تشعرين وكأنك تعيشين داخلها.</p>
+            <button onclick="showInfo('vr')">اكتشفي المزيد ←</button>
+          </div>
+        </article>
+
+        <article class="world-card ar-card">
+          <div class="card-image ar-image">🌍</div>
+          <div class="card-content">
+            <span class="mini-tag">AR</span>
+            <h3>الواقع المعزز</h3>
+            <p>تقنية تضيف عناصر ومعلومات رقمية إلى العالم الحقيقي من حولك.</p>
+            <button onclick="showInfo('ar')">اكتشفي المزيد ←</button>
+          </div>
+        </article>
+      </div>
+
+      <div class="adventure">
+        <div>
+          <span class="tag">🎀 اختبري نفسك</span>
+          <h2>هل أنتِ مستعدة للتحدي؟</h2>
+          <p>10 أسئلة ممتعة لمعرفة مدى فهمك لعالم VR وAR.</p>
+        </div>
+        <button class="main-btn" onclick="startQuiz()">هيا نبدأ 🚀</button>
+      </div>
+    </section>
+
+    <section id="info" class="screen">
+      <button class="back-btn" onclick="goHome()">→ العودة للرئيسية</button>
+      <div class="info-panel">
+        <div class="info-emoji" id="infoEmoji">🥽</div>
+        <span class="tag" id="infoTag">VR</span>
+        <h1 id="infoTitle"></h1>
+        <p id="infoDescription"></p>
+        <h3>أين تُستخدم هذه التقنية؟</h3>
+        <div id="infoUses" class="uses"></div>
+        <button class="main-btn" onclick="startQuiz()">اختبري معلوماتك ✨</button>
+      </div>
+    </section>
+
+    <section id="quiz" class="screen">
+      <div class="quiz-header">
+        <button class="back-btn" onclick="goHome()">→ الرئيسية</button>
+        <span id="questionNumber">السؤال 1 من 10</span>
+        <span id="scoreLabel">⭐ 0 نقطة</span>
+      </div>
+
+      <div class="progress">
+        <div id="progressBar"></div>
+      </div>
+
+      <div class="quiz-panel">
+        <div class="quiz-emoji">🪄</div>
+        <span class="tag">تحدي كوكب المعرفة</span>
+        <h2 id="questionText"></h2>
+        <div id="answers" class="answers"></div>
+        <p id="feedback"></p>
+        <button id="nextBtn" class="main-btn hidden" onclick="nextQuestion()">السؤال التالي ←</button>
+      </div>
+    </section>
+
+    <section id="result" class="screen">
+      <div class="result-panel">
+        <div class="result-emoji">🏆</div>
+        <span class="tag">وصلتِ إلى نهاية الرحلة</span>
+        <h1>نتيجتكِ النهائية</h1>
+        <div class="score-circle">
+          <strong id="finalScore">0</strong>
+          <span>من 10</span>
+        </div>
+        <h2 id="resultMessage"></h2>
+        <p id="resultDescription"></p>
+        <button class="main-btn" onclick="restartQuiz()">🔄 أعيدي الاختبار</button>
+        <button class="back-btn" onclick="goHome()">العودة إلى الكوكب</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>💗</span> صُمم بحب لعشاق التكنولوجيا والخيال <span>💎</span>
+    <small>رحلة تعليمية في عالم الواقع الافتراضي والواقع المعزز</small>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
 </html>
